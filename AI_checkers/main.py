@@ -1,10 +1,27 @@
 import pygame
+from checkers.constants import width,height
+from checkers.board import Board
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+FPS=60
+display=pygame.display.set_mode((width,height))
+pygame.display.set_caption('AI_Chekers')
 
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    run=True
+    timeRate=pygame.time.Clock()
+    game_board=Board()
+
+
+    while run:
+        timeRate.tick(FPS)
+        for event in pygame.event.get():
+            if event.type ==pygame.QUIT:
+                #ending the game
+                run=False
+            if event.type==pygame.MOUSEBUTTONDOWN:
+                pass
+        game_board.draw(display)
+        pygame.display.update()
+
+    pygame.quit()
+
