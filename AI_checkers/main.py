@@ -1,6 +1,8 @@
 import pygame
 from checkers.constants import width,height,squares_size
 from checkers.board import Board
+from checkers.game import Game
+
 
 FPS=60
 display=pygame.display.set_mode((width,height))
@@ -17,7 +19,7 @@ if __name__ == '__main__':
     run=True
     timeRate=pygame.time.Clock()
     game_board=Board()
-
+    game=Game(display)
 
     while run:
         timeRate.tick(FPS)
@@ -30,9 +32,8 @@ if __name__ == '__main__':
                 row,column=get_from_mouse(position)
                 piece=game_board.get_piece(row,column)
                 game_board.move(piece,4,3)
-                
-        game_board.draw(display)
-        pygame.display.update()
+
+        game.update()
 
     pygame.quit()
 
