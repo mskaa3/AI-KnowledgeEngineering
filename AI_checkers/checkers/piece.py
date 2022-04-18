@@ -12,12 +12,6 @@ class Piece:
         self.column=column
         self.color=color
         self.king=False
-        if self.color==black:
-            #blacks are going up
-             self.direction=-1
-        else:
-            #whites are going down
-            self.direction=1
         self.x=0
         self.y=0
         self.piece_position()

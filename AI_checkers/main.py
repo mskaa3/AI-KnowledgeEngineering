@@ -1,5 +1,5 @@
 import pygame
-from checkers.constants import width,height,squares_size
+from checkers.constants import width,height,squares_size,black,white
 from checkers.board import Board
 from checkers.game import Game
 
@@ -30,8 +30,9 @@ if __name__ == '__main__':
             if event.type==pygame.MOUSEBUTTONDOWN:
                 position=pygame.mouse.get_pos()
                 row,column=get_from_mouse(position)
-                piece=game_board.get_piece(row,column)
-                game_board.move(piece,4,3)
+                # if game.turn==black:
+                game.select(row,column)
+
 
         game.update()
 
