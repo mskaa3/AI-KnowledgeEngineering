@@ -104,8 +104,9 @@ class Board:
                     moves[(r, left)] = last + skipped
                 else:
                     moves[(r, left)] = last
+
                 if last:
-                    if step == 1:
+                    if step == -1:
                         row = max(r - 3, 0)
                     else:
                         row = min(r + 3, rows)
@@ -137,7 +138,7 @@ class Board:
                 else:
                     moves[(r, right)] = last
                 if last:
-                    if step == 1:
+                    if step == -1:
                         row = max(r - 3, 0)
                     else:
                         row = min(r + 3, rows)
