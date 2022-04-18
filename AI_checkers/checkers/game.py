@@ -51,6 +51,9 @@ class Game:
             return False
         return True
 
+    def winner(self):
+        return self.board.winner()
+
     def change_turns(self):
         self.valid_movement = {}
         if self.turn==white:

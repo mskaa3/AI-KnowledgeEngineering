@@ -23,6 +23,9 @@ if __name__ == '__main__':
 
     while run:
         timeRate.tick(FPS)
+        if game.winner()!=None:
+            print()
+
         for event in pygame.event.get():
             if event.type ==pygame.QUIT:
                 #ending the game
