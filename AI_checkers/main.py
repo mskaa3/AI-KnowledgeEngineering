@@ -29,7 +29,7 @@ if __name__ == '__main__':
     while run:
         timeRate.tick(FPS)
         if game.turn == white:
-            time.sleep(1)
+
             value, new_situation = minmax(game.take_board(), 3, white, game)
             game.AI(new_situation)
 
