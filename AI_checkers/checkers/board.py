@@ -58,6 +58,17 @@ class Board:
 
         return None
 
+    def heuristics(self):
+        return self.white_onboard-self.black_onboard+(self.white_kings*0,5-self.black_kings*0,5)
+    #ZMIENIC
+
+    def get_all(self,color):
+        pieces=[]
+        for row in self.board:
+            for piece in row:
+                if piece!=0 and piece.color==color:
+                    pieces.append(piece)
+        return pieces
 
     def move(self, piece, row, column):
         # swapping values

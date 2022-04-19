@@ -23,8 +23,10 @@ if __name__ == '__main__':
 
     while run:
         timeRate.tick(FPS)
-        if game.winner()!=None:
-            print()
+        if game.winner() is not None:
+            print(game.winner())
+            run=False
+            #JAKIS ŁADNY DISPLAY
 
         for event in pygame.event.get():
             if event.type ==pygame.QUIT:
