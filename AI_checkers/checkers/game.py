@@ -16,7 +16,7 @@ class Game:
     def _init(self):
         self.selected_piece = None
         self.board = Board()
-        self.turn = white
+        self.turn = black
         self.valid_movement = {}
 
     def reset(self):
@@ -67,7 +67,7 @@ class Game:
             pygame.draw.circle(self.display,red,(column*squares_size+squares_size//2,row*squares_size+squares_size//2),10)
 
     def take_board(self):
-        return self.board()
+        return self.board
 
     def AI(self,board):
         self.board=board

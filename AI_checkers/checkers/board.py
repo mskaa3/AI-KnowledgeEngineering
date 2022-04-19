@@ -45,36 +45,38 @@ class Board:
         for piece in pieces:
             self.board[piece.row][piece.column] = 0
             if piece != 0:
-                if piece.color==black:
-                    self.black_onboard-=1
+                if piece.color == black:
+                    self.black_onboard -= 1
                 else:
-                    self.white_onboard-=1
+                    self.white_onboard -= 1
 
     def winner(self):
-        if self.black_onboard <=0:
+        if self.black_onboard <= 0:
             return white
-        else:
+        elif self.white_onboard<=0:
             return black
+        else:
+            return None
 
-        return None
+    def evaluate(self):
+        return self.white_onboard - self.black_onboard + (self.white_kings * 0.5 - self.black_kings * 0.5)
 
-    def heuristics(self):
-        return self.white_onboard-self.black_onboard+(self.white_kings*0,5-self.black_kings*0,5)
-    #ZMIENIC
+    # ZMIENIC
 
-    def get_all(self,color):
-        pieces=[]
+    def get_all(self, color):
+        pieces = []
         for row in self.board:
             for piece in row:
-                if piece!=0 and piece.color==color:
+                if piece != 0 and piece.color == color:
                     pieces.append(piece)
         return pieces
 
     def move(self, piece, row, column):
         # swapping values
-        self.board[piece.row][piece.column], self.board[row][column] = self.board[row][column], self.board[piece.row][piece.column]
+        self.board[piece.row][piece.column], self.board[row][column] = self.board[row][column], self.board[piece.row][
+            piece.column]
         piece.move(row, column)
-        if row == rows-1 or row == 0:
+        if row == rows - 1 or row == 0:
             piece.change_to_king()
             if piece.color == white:
                 self.white_kings += 1
