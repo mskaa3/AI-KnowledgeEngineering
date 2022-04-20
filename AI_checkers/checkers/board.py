@@ -52,16 +52,49 @@ class Board:
 
     def winner(self):
         if self.black_onboard <= 0:
-            return "White won!"
-        elif self.white_onboard<=0:
-            return "Black won!"
+            return "White"
+        elif self.white_onboard <= 0:
+            return "Black"
         else:
             return None
 
     def evaluate(self):
-        return self.white_onboard - self.black_onboard + (self.white_kings * 0.5 - self.black_kings * 0.5)
+        safeBlack = 0
+        safeWhite = 0
+        for row in self.board:
+            for piece in row:
+                if piece!=0:
+                    if piece.color == black:
+                        if piece.row + 1 < rows and piece.column-1 >= 0:
+                            if self.get_piece(piece.row + 1, piece.column - 1) != 0:
+                                safeBlack += 0.5
+                        if piece.row + 1 < rows and piece.column+1 < columns:
+                            if self.get_piece(piece.row + 1, piece.column + 1) != 0:
+                                safeBlack += 0.5
+                    else:
+                        if piece.row - 1 >= 0 and piece.column-1 >= 0:
+                            if self.get_piece(piece.row - 1, piece.column - 1) != 0:
+                                safeWhite += 0.5
+                        if piece.row - 1 >= 0 and piece.column+1 < columns:
+                            if self.get_piece(piece.row - 1, piece.column + 1) != 0:
+                                safeWhite += 0.5
 
-    # ZMIENIC
+        return -self.black_onboard + self.white_onboard +(self.white_kings * 0.5 - self.black_kings * 0.5) + safeWhite - safeBlack
+
+    # def evaluate(self):
+    #     return self.white_onboard - self.black_onboard + (self.white_kings * 0.5 - self.black_kings * 0.5)
+
+    def evaluateDifferently(self):
+        blackMovable = 0
+        whiteMovable = 0
+        for piece in self.board:
+            if len(self.get_valid_moves(piece)) > 1:
+                if piece.color == black:
+                    blackMovable += 1
+                else:
+                    whiteMovable += 1
+        return self.black_onboard - self.white_onboard + (
+                    self.black_kings * 0.5 - self.white_kings * 0.5) + blackMovable - whiteMovable
 
     def get_all(self, color):
         pieces = []
