@@ -5,7 +5,7 @@ import pygame
 from checkers.constants import width,height,squares_size,black,white
 from checkers.board import Board
 from checkers.game import Game
-from minMax.algorithm import minmax,minmaxDifferentEvaluation
+from minMax.algorithm import minmax, minmaxDifferentEvaluation, minmaxDifferentEvaluationAlfaBeta, minmaxAlfaBeta
 
 FPS=300
 display=pygame.display.set_mode((width,height))
@@ -15,6 +15,8 @@ AIwhiteturns=0
 AIblackturns=0
 movement=0
 playAgainstAI=False
+BdecisionTime=0
+WdecisionTime=0
 
 def get_from_mouse(position):
     x,y=position
@@ -33,9 +35,11 @@ if __name__ == '__main__':
 
 
 
+
     while run:
         timeRate.tick(FPS)
         movement+=1
+
         try:
             if game.winner() != None:
                 print(game.winner())
@@ -44,30 +48,40 @@ if __name__ == '__main__':
                 else:
                     print(f"Blacks won in {AIblackturns} turns")
                 run=False
-        except AttributeError:
-            print(f"No possible movements,{game.turn} lost")
 
-        try:
             if (game.turn == white and movement%2==0) or (playAgainstAI and game.turn == white):
-
-                value, new_situation = minmax(game.take_board(), 3, white, game,black,-math.inf,math.inf)
+                start=time.time_ns()
+                value, new_situation = minmaxAlfaBeta(game.take_board(), 3, white, game,black,-math.inf,math.inf)
+                # value, new_situation = minmax(game.take_board(), 3, white, game, black)
                 game.AI(new_situation)
+                finish=time.time_ns()
+                WdecisionTime=WdecisionTime+(finish-start)
                 AIwhiteturns+=1
+                print("Cureent average time of movement for whites")
+                print(WdecisionTime / AIwhiteturns)
                 #AIsingleTurns+=1
-        except AttributeError:
-            print("No possible movements for whites")
-            print(f"Blacks won in {AIblackturns} turns")
 
-        timeRate.tick(FPS)
-        try:
+
+            timeRate.tick(FPS)
+
             if game.turn==black and movement%2==1 and playAgainstAI is False:
-
-                value, new_situation = minmaxDifferentEvaluation(game.take_board(), 3, black, game,white,-math.inf,math.inf)
+                start = time.time_ns()
+                value, new_situation = minmaxDifferentEvaluationAlfaBeta(game.take_board(), 3, black, game,white,-math.inf,math.inf)
+                # value, new_situation = minmaxDifferentEvaluation(game.take_board(), 3, black, game, white)
                 game.AI(new_situation)
+                finish=time.time_ns()
+                BdecisionTime=BdecisionTime+(finish-start)
                 AIblackturns+=1
+                print("Cureent average time of movement for blacks")
+                print(BdecisionTime / AIblackturns)
+
         except AttributeError:
-            print("No possible movements for black")
-            print(f"Whites won in {AIwhiteturns} turns")
+            if game.turn==black:
+                print("No possible movements for whites")
+                print(f"Blacks won in {AIblackturns} turns")
+            else:
+                print("No possible movements for black")
+                print(f"Whites won in {AIwhiteturns} turns")
 
 
 
@@ -95,6 +109,8 @@ if __name__ == '__main__':
             run=False
         else:
             game.update()
+
+
 
     pygame.quit()
 
