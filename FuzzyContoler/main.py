@@ -1,4 +1,5 @@
 import numpy as np
+import sympy as sy
 rules = np.array([['low', 'negative', 'optimal','low','low','low','ac','away'],
                   ['optimal', 'negative', 'optimal','low','low','low','ac','away'],
                   ['high', 'negative', 'optimal','low','low','low','ac','away'],
@@ -81,6 +82,8 @@ def temp(x):
 
 def Tdifference(x):
     diffList=[]
+    if x<-1 or x>3:
+        raise
     def negative(x):
         if x>=-1 and x<=-0.9:
             diffList.append(1)
@@ -156,6 +159,7 @@ def dew_point(x):
     Doptimal(x)
     Dhumid(x)
     return dewList
+
 
 
 def calculate(temperature:[], volts:[],dew:[],difference:[]):
@@ -250,18 +254,22 @@ def calculate(temperature:[], volts:[],dew:[],difference:[]):
 
 def defuzzify(dictionary):
 
-    CSspeed=(30*dictionary['csspeed'][0]+60*dictionary['csspeed'][1]+90*dictionary['csspeed'][2])/(dictionary['csspeed'][0]+dictionary['csspeed'][1]+dictionary['csspeed'][2])
+    CSspeed=(30*dictionary['csspeed'][0]+60*dictionary['csspeed'][1]+90*dictionary['csspeed'][2])/\
+            (dictionary['csspeed'][0]+dictionary['csspeed'][1]+dictionary['csspeed'][2])
     FSspeed = (30 * dictionary['fsspeed'][0] + 60 * dictionary['fsspeed'][1] + 90 * dictionary['fsspeed'][2]) / \
               (dictionary['fsspeed'][0] + dictionary['fsspeed'][1] + dictionary['fsspeed'][2])
     Mode=dictionary['mode'][0]*1/(dictionary['mode'][0]+dictionary['mode'][1])
-    FnDirection=(75*dictionary['fdirection'][0]+25*dictionary['fdirection'][1])/(dictionary['fdirection'][0]+dictionary['fdirection'][1])
+    FnDirection=(87.5*dictionary['fdirection'][0]+12.5*dictionary['fdirection'][1])/(dictionary['fdirection'][0]+dictionary['fdirection'][1])
 
     return  CSspeed,FSspeed,Mode,FnDirection
 
 
 if __name__ == '__main__':
+    print('Input variables- temperature=23, volts=174, dew point=13, temperature difference=0.25')
+    print(f'Fuzzified input variables- temperature: {temp(23)}, volts: {electric_volt(174)},\n  dew point: {dew_point(13)}, difference of temperature: {Tdifference(0.25)}')
     fuzzified=calculate(temp(23),electric_volt(174),dew_point(13),Tdifference(0.25))
     print("------------------------------------")
+    print("Fuzzified output")
     print(fuzzified.items())
     defuzy=defuzzify(fuzzified)
     print(f'predicted compressor speed {defuzy[0]}')
